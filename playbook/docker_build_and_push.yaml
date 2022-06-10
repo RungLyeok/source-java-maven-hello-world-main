@@ -1,15 +1,13 @@
 - name: Docker Image Build and push
-  hosts: ansible_host #ansible VM에 실행
+  hosts: ansible_host
   gather_facts: false
 
   tasks:
-      # 도커 이미지 빌드
-    - command: docker image build -t smdfur2000/java-hello-world java-hello-world
-      # 도커허브 로그인
-    - command: docker login -u smdfur2000 -p "{{ lookup('env', 'DKPASS') }}"
-      # 도커 허브에 이미지 push
+    - command: docker image prune
+    - command: y
+    - command: docker image build -t smdfur2000/java-hello-world java-hello-world/
+    - command: docker login -u smdfur2000 -p $DKPASS
     - command: docker push smdfur2000/java-hello-world
-      # 도커 로그아웃
     - command: docker logout
 
 - name: Docker Run
@@ -17,10 +15,6 @@
   gather_facts: false
 
   tasks:
-      #도커 컨테이너가 이미 있으면 삭제하고 진행한다.
-    - command: docker container rm -f java-hello-world 
-      #삭제할게 없으면 오류가 발생하지만, 무시하고 진행하게 한다.
+    - command: docker container rm -f java-hello-world     
       ignore_errors: yes 
-      # 도커 컨테이너 생생성
     - command: docker container run -d -p 8080:8080 --name java-hello-world java-hello-world
-    
