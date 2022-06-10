@@ -6,13 +6,13 @@
       # 도커 이미지 빌드
     - command: docker image build -t java-hello-world/
       # 도커허브 로그인
-    - command: docker login -u smdfur2000 -p {{ lookup('env', 'DKPASS') }}
+    - command: docker login -u smdfur2000 -p "{{ lookup('env', 'DKPASS') }}"
       # 도커 허브에 이미지 push
     - command: docker push smdfur2000/java-hello-world
       # 도커 로그아웃
     - command: docker logout
 
-- name: Docker run
+- name: Docker Run
   hosts: docker_host #dockerVM에 실행
   gather_fact: false
 
