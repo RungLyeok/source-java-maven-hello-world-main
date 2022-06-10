@@ -4,7 +4,7 @@
 
   tasks:
     - command: docker image build -t smdfur2000/java-hello-world java-hello-world/
-    - command: docker login -u smdfur2000 -p {{ lookup('env', 'PASS') }}
+    - command: docker login -u smdfur2000 -p '{{ lookup( "env", "PASS" ) }}'
     - command: docker push smdfur2000/java-hello-world
     - command: docker logout
 
