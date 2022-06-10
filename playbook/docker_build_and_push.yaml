@@ -3,8 +3,6 @@
   gather_facts: false
 
   tasks:
-    - command: docker image prune
-    - command: y
     - command: docker image build -t smdfur2000/java-hello-world java-hello-world/
     - command: docker login -u smdfur2000 -p $DKPASS
     - command: docker push smdfur2000/java-hello-world
