@@ -1,0 +1,20 @@
+- hosts: docker_host
+  gather_facts: no
+
+  tasks:
+    # 만약에 똑같은 이름의 컨테이너가 존재하면 삭제한다.
+    - name: Remove Container 
+      docker_container:
+        name: java-hello-world
+        state: absent
+      ignore_errors: yes # 오류 발생시 무시
+    
+    # 컨테이너 생성 코드
+    - name: Create Container
+      docker_container:
+        name: java-hello-world
+        imgae: smdfur2000/java-hello-world
+        state: started
+        recreate: yes
+        ports: #포트 포워딩
+          - "8080:8080"

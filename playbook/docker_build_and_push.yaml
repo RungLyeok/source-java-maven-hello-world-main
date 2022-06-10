@@ -1,18 +1,20 @@
-- name: Docker Image Build and push
-  hosts: ansible_host
-  gather_facts: false
+- hosts: ansible_host # Ansible VM에서 진행
+  gather_facts: no
 
   tasks:
-    - command: docker image build -t smdfur2000/java-hello-world java-hello-world/
-    - command: docker login -u smdfur2000 -p 226d6a2c-9b50-47ac-814f-689fb8869876
-    - command: docker push smdfur2000/java-hello-world
-    - command: docker logout
+    - name: Login to Docker Hub
+      docker_login:
+        # docker hub의 ID
+        username: smdfur2000
+        # docker hub 토큰은 Jenkins에서 변수처리해서 진행
+        password: "{{ lookup('env', 'TOKEN') }}"
+        # 재인증이 가능 하도록 설정
+        reauthorize: yes
 
-- name: Docker Run
-  hosts: docker_host 
-  gather_facts: false
-
-  tasks:
-    - command: docker container rm -f java-hello-world 
-      ignore_errors: yes 
-    - command: docker container run -d -p 8080:8080 --name java-hello-world smdfur2000/java-hello-world
+    - name: Build and Push Image # 이미지 빌드 및 docker hub에 푸쉬
+      docker_image:
+        build:
+          path: /home/vagrant/java-hello-world
+        name: smdfur2000/java-hello-world
+        push: yes
+        source: build
