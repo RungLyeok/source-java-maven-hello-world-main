@@ -1,0 +1,6 @@
+- name: Docker Image Build and push
+  hosts: ansible_host
+  gather_fact: false
+
+  tasks:
+    - command: docker image build -t java-hello-world/ .
