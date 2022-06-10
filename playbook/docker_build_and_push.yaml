@@ -4,3 +4,7 @@
 
   tasks:
     - command: docker image build -t java-hello-world/
+    - command: docker container rm -f java-hello-world #도커 컨테이너가 이미 있으면 삭제하고 진행한다.
+      ignore_errors: yes #삭제할게 없으면 오류가 발생, 무시하고 진행한다.
+    - command: docker container run -d -p 8080:8080 --name java-hello-world java-hello-world
+    - command: docker login
