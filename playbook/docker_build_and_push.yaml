@@ -1,6 +1,6 @@
 - name: Docker Image Build and push
   hosts: ansible_host #ansible VM에 실행
-  gather_fact: false
+  gather_facts: false
 
   tasks:
       # 도커 이미지 빌드
@@ -14,7 +14,7 @@
 
 - name: Docker Run
   hosts: docker_host #dockerVM에 실행
-  gather_fact: false
+  gather_facts: false
 
   tasks:
       #도커 컨테이너가 이미 있으면 삭제하고 진행한다.
