@@ -4,7 +4,11 @@
 
   tasks:
     - command: docker image build -t smdfur2000/java-hello-world java-hello-world/
-    - command: docker login -u smdfur2000 -p $DKPASS
+    - name: Login to Docker Hub
+      docker_login:
+        username: smdfur2000
+        password: "{{ lookup('env', 'DKPASS') }}"
+        reauthorize: yes
     - command: docker push smdfur2000/java-hello-world
     - command: docker logout
 
@@ -13,6 +17,6 @@
   gather_facts: false
 
   tasks:
-    - command: docker container rm -f java-hello-world     
+    - command: docker container rm -f java-hello-world 
       ignore_errors: yes 
     - command: docker container run -d -p 8080:8080 --name java-hello-world java-hello-world
