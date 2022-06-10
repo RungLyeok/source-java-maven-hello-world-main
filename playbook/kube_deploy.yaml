@@ -13,7 +13,7 @@
     - name: Create Container
       docker_container:
         name: java-hello-world
-        imgae: smdfur2000/java-hello-world
+        image: smdfur2000/java-hello-world
         state: started
         recreate: yes
         ports: #포트 포워딩
