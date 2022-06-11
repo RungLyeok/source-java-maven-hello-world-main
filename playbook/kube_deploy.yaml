@@ -1,0 +1,50 @@
+# ansibleVM에서 실행 시킴
+- hosts: ansible_host
+  gather_facts: no
+
+  tasks:
+    #- command: kubectl apply -f java-hello-world/kube_manifest/
+    - name: Create Deployment
+      k8s:
+        state: present
+        definition:
+          apiVersion: apps/v1
+          kind: Deployment
+          metadata:
+            name: java-hello-world
+            # ansible의 k8s 모듈은 namespace 작성이 필수이다.
+            namespace: default
+          spec:
+            replicas: 3
+            selector:
+              matchLabels:
+                app: java-hello-world
+            template:
+              metadata:
+                labels:
+                  app: java-hello-world
+              spec:
+                containers:
+                  - name: java-hello-world
+                    # 이미지 태그를 변수처리하여 변수에 맞는 이미지를 가져와 사용한다.
+                    image: "c1t1d0s7/java-hello:{{ lookup('env', 'BUILD_NUMBER') }}"
+                    imagePullPolicy: Always
+                    ports:
+                      - containerPort: 8080 
+    - name: Create Service
+      k8s:
+        state: present
+        definition:
+          apiVersion: v1
+          kind: Service
+          metadata:
+            name: java-hello-svc
+            namespace: default
+          spec:
+            type: NodePort
+            selector:
+              app: java-hello-world
+            ports:
+              - port: 80
+                targetPort: 8080
+                nodePort: 31313

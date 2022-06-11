@@ -15,6 +15,8 @@
       docker_image:
         build:
           path: /home/vagrant/java-hello-world
+        # 이미지 빌드 시 젠킨스의 환경변수를 이용하여 태그를 붙인다.
         name: smdfur2000/java-hello-world
+        tag: "{{ lookup('env', 'BUILD_NUMBER') }}"
         push: yes
         source: build
