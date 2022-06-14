@@ -1,5 +1,6 @@
 - hosts: ansible_host # Ansible VM에서 진행
   gather_facts: no
+  become: yes
 
   tasks:
     - name: Login to Docker Hub
